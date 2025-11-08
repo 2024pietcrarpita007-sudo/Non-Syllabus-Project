@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///C:/Users/Dell/Downloads/index%20(2).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Employee Management System</title>
+  <link rel="stylesheet" href="./index_files/style.css">
+</head>
+<body>
+  <!-- LOGIN / APP SHELL -->
+  <div id="app">
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="center-screen" style="display: none;">
+      <div class="card login-card">
+        <h1 class="brand">EMS</h1>
+        <p class="lead">Employee Management System</p>
+
+        <div class="form-row">
+          <label>Email / Username</label>
+          <input id="loginUser" placeholder="admin@company.com or username">
+        </div>
+        <div class="form-row">
+          <label>Password</label>
+          <input id="loginPass" type="password" placeholder="password">
+        </div>
+        <div class="form-row">
+          <label>Role</label>
+          <select id="loginRole">
+            <option value="employee">Employee</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button id="btnLogin" class="btn primary">Login</button>
+          <button id="btnDemo" class="btn outline">Demo users</button>
+        </div>
+        <p id="loginError" class="error"></p>
+
+        <hr>
+        <p class="muted">This is a frontend-only demo. Data stored in browser Local Storage.</p>
+      </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" class="app-shell" style="">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <div class="logo">
+            <div class="logo-mark">EMS</div>
+            <div class="logo-text">EmployeeMS</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a data-view="dashboard" class="nav-item active">Dashboard</a>
+          <a data-view="manage" class="nav-item" id="navManage">Manage Employees</a>
+          <a data-view="attendance" class="nav-item" id="navAttendance">Attendance</a>
+          <a data-view="leave" class="nav-item" id="navLeave">Leave</a>
+          <a data-view="salary" class="nav-item" id="navSalary">Salary</a>
+          <a data-view="reports" class="nav-item" id="navReports">Reports</a>
+          <a data-view="settings" class="nav-item">Settings</a>
+          <a data-view="about" class="nav-item">About / Help</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <button id="btnLogout" class="btn small">Logout</button>
+        </div>
+      </aside>
+
+      <!-- CONTENT -->
+      <main class="content">
+        <header class="topbar">
+          <div class="search">
+            <input id="globalSearch" placeholder="Search employees (name, email)...">
+          </div>
+          <div class="top-actions">
+            <div id="currentUserCard" class="user-card">Company Admin • admin</div>
+          </div>
+        </header>
+
+        <section id="view-dashboard" class="view active">
+          <div class="grid-3">
+            <div class="card stat">
+              <div class="stat-title">Total Employees</div>
+              <div id="statTotal" class="stat-value">2</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-title">Present Today</div>
+              <div id="statPresent" class="stat-value">1</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-title">Leaves Pending</div>
+              <div id="statLeaves" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Overview</h3>
+            <p id="welcomeText" class="muted">Admin Dashboard — manage employees, view attendance and approve leaves.</p>
+
+            <div id="employeeQuick" style="margin-top:15px;"><div class="muted">Admin quick: manage employees and approvals.</div></div>
+          </div>
+        </section>
+
+        <section id="view-manage" class="view">
+          <div class="card">
+            <div class="flex-between">
+              <h3>Manage Employees</h3>
+              <div>
+                <button id="btnAddEmp" class="btn small primary">+ Add Employee</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table id="employeesTable">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Join Date</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody><tr>
+        <td>admin</td>
+        <td>Company Admin</td>
+        <td>admin@company.com</td>
+        <td>admin</td>
+        <td>Management</td>
+        <td>08/11/2025</td>
+        <td>5000</td>
+        <td>
+          <button class="btn small" data-action="edit" data-user="admin">Edit</button>
+          <button class="btn outline small" data-action="view" data-user="admin">View</button>
+        </td>
+      </tr><tr>
+        <td>jdoe</td>
+        <td>John Doe</td>
+        <td>john.doe@company.com</td>
+        <td>employee</td>
+        <td>Engineering</td>
+        <td>08/11/2025</td>
+        <td>3000</td>
+        <td>
+          <button class="btn small" data-action="edit" data-user="jdoe">Edit</button>
+          <button class="btn outline small" data-action="view" data-user="jdoe">View</button>
+        </td>
+      </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-attendance" class="view">
+          <div class="card">
+            <h3>Attendance</h3>
+            <div id="attendanceActions" class="muted" style="margin-bottom:10px;"></div>
+
+            <div class="attendance-controls">
+              <button id="btnCheckIn" class="btn primary">Check In</button>
+              <button id="btnCheckOut" class="btn outline">Check Out</button>
+              <span id="todayStatus" class="muted" style="margin-left:10px">Checked in: 11:43  |  Checked out: 11:43</span>
+            </div>
+
+            <div style="margin-top:15px" class="table-wrap">
+              <table id="attendanceTable">
+                <thead>
+                  <tr><th>User</th><th>Date</th><th>Check In</th><th>Check Out</th><th>Hours</th></tr>
+                </thead>
+                <tbody><tr>
+          <td>Company Admin</td>
+          <td>08/11/2025</td>
+          <td>11:43</td>
+          <td>11:43</td>
+          <td>0.00</td>
+        </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-leave" class="view">
+          <div class="card">
+            <div class="flex-between">
+              <h3>Leave Management</h3>
+              <div id="leaveControls"></div>
+            </div>
+
+            <div class="grid-2" style="margin-top:12px;">
+              <div>
+                <h4>Apply for Leave</h4>
+                <div class="form-row">
+                  <label>Leave Date</label>
+                  <input id="leaveDate" type="date">
+                </div>
+                <div class="form-row">
+                  <label>Reason</label>
+                  <input id="leaveReason" placeholder="Reason for leave">
+                </div>
+                <div class="actions">
+                  <button id="btnApplyLeave" class="btn primary">Apply</button>
+                  <p id="leaveMsg" class="muted" style="display:inline-block;margin-left:10px;"></p>
+                </div>
+              </div>
+
+              <div>
+                <h4>Requests</h4>
+                <div class="table-wrap">
+                  <table id="leaveTable">
+                    <thead><tr><th>User</th><th>Date</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody><tr>
+        <td>Company Admin</td>
+        <td>2025-11-20</td>
+        <td>have to attend a wedding</td>
+        <td>Approved</td>
+        <td><span class="muted">Approved</span></td>
+      </tr><tr>
+        <td>Company Admin</td>
+        <td>2025-11-13</td>
+        <td>have to attend a seminar</td>
+        <td>Rejected</td>
+        <td><span class="muted">Rejected</span></td>
+      </tr></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-salary" class="view">
+          <div class="card">
+            <h3>Salary Management</h3>
+
+            <p class="muted">This demo calculates salary using a simple formula: <strong> (monthly salary) × (workedDays / totalWorkingDays)</strong></p>
+            <div class="table-wrap" style="margin-top:12px;">
+              <table id="salaryTable">
+                <thead><tr><th>User</th><th>Base Salary</th><th>Worked Days</th><th>Calculated Salary</th></tr></thead>
+                <tbody><tr><td>Company Admin</td><td>5000</td><td>1</td><td>227.27</td></tr><tr><td>John Doe</td><td>3000</td><td>0</td><td>0.00</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-reports" class="view">
+          <div class="card">
+            <h3>Reports</h3>
+            <div class="grid-2" style="gap:18px;margin-top:12px;">
+              <div class="card small">
+                <h4>Attendance Summary (This Month)</h4>
+                <div id="reportSummary" class="muted">Company Admin: 1 day(s)<br>John Doe: 0 day(s)</div>
+              </div>
+              <div class="card small">
+                <h4>Leave Summary</h4>
+                <div id="reportLeaves" class="muted">Approved: 1<br>Rejected: 1</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-settings" class="view">
+          <div class="card">
+            <h3>Settings</h3>
+            <div class="form-row">
+              <label>Company Working Days/month</label>
+              <input id="settingWorkingDays" type="number" min="1">
+            </div>
+            <div class="form-row">
+              <label>Company Working Hours/day</label>
+              <input id="settingWorkingHours" type="number" min="1">
+            </div>
+            <div class="actions">
+              <button id="btnSaveSettings" class="btn primary">Save Settings</button>
+              <span id="settingsMsg" class="muted" style="margin-left:10px"></span>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-about" class="view">
+          <div class="card">
+            <h3>About / Help</h3>
+            <p>This is a fully client-side demo of an Employee Management System. Use the <strong>Demo users</strong> button at login to create example users quickly.</p>
+            <ul>
+              <li>Admins: can add/edit/delete employees, approve/reject leaves, view reports.</li>
+              <li>Employees: can check-in/out, apply for leaves, view own attendance.</li>
+            </ul>
+            <p class="muted">For a production app, add a backend (Node/Express + DB), secure authentication (JWT), and server-side validation.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modalOverlay" class="modal-overlay" style="display:none;">
+    <div class="modal card" id="modalContent"></div>
+  </div>
+
+  <script src="./index_files/script.js"></script>
+
+
+</body></html>
